@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import theme from '../theme';
 import RoomIcon from '@material-ui/icons/Room';
 import WatchLaterIcon from '@material-ui/icons/WatchLater';
+import DayItem from '../components/DayItem';
 
 const useStyles = makeStyles({
     background: {
@@ -53,6 +54,9 @@ function WeatherDisplay() {
                         <MenuItem value={3}>Weekly</MenuItem>
                     </Select>
                     <Button color="primary" variant="contained">FETCH DATA</Button>
+                </div>
+                <div style={{margin:'20px'}}>
+                <DayItem temperature={20} nightlyTemperature={7}/>
                 </div>
             </Container>
         </div>
