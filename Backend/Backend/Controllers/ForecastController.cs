@@ -21,9 +21,9 @@ namespace Backend.Controllers
             applicationDbContext = dbContext;
         }
         [HttpPost("/api/forecast/oneday")]
-        public Forecast getOneForecast(int cityid)
+        public Forecast getOneForecast([FromHeader]int cityid, [FromHeader] string date)
         {
-            return applicationDbContext.GetOneDayForecast(cityid, DateTime.Now.ToString("yyyy-MM-dd"));
+            return applicationDbContext.GetOneDayForecast(cityid, date);
         }
     }
 }
