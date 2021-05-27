@@ -76,7 +76,7 @@ namespace Backend.Data
         {
             var cultureInfo = new CultureInfo("lt-LT");
             List<Forecast> forecasts = new List<Forecast>();
-            string endDate = DateTime.Parse(startDate, cultureInfo).AddDays(7).ToString("yyyy-MM-dd");
+            string endDate = DateTime.Parse(startDate, cultureInfo).AddDays(6).ToString("yyyy-MM-dd");
             using(MySqlConnection con = GetConnection())
             {
                 con.Open();

@@ -8,6 +8,7 @@ import {
   Grid,
   FormControlLabel,
   Switch,
+  Paper,
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import theme from "../theme";
@@ -31,6 +32,12 @@ const useStyles = makeStyles({
     alignItems: "center",
     paddingBottom: "20px",
     justifyContent: "space-evenly",
+  },
+  error: {
+    backgroundColor: "#FF0000",
+    color: "#ffffff",
+    padding: "20px",
+    width: "100%",
   },
 });
 
@@ -71,19 +78,21 @@ function WeeklyReport(props) {
         }}
       >
         {props.data.map((obj) => {
-          <Grid item xs={4}>
-            <DayItem
-              date={obj.day}
-              status={obj.weatherStatus}
-              temperature={obj.dayTemperature}
-              nightlyTemperature={obj.nightTemperature}
-              humidity={obj.humidity}
-              windspeed={obj.windSpeed}
-              sunrise={obj.sunrise}
-              sunset={obj.sunset}
-              isCelsius={props.isCelsius}
-            />
-          </Grid>;
+          return (
+            <Grid item xs={4}>
+              <DayItem
+                date={obj.day}
+                status={obj.weatherStatus}
+                temperature={obj.dayTemperature}
+                nightlyTemperature={obj.nightTemperature}
+                humidity={obj.humidity}
+                windspeed={obj.windSpeed}
+                sunrise={obj.sunrise}
+                sunset={obj.sunset}
+                isCelsius={props.isCelsius}
+              />
+            </Grid>
+          );
           console.log(obj);
         })}
       </Grid>
@@ -94,10 +103,18 @@ function WeeklyReport(props) {
 function ForecastDisplay(props) {
   if (
     (props.interval === 1 || props.interval === 2) &&
-    props.data !== undefined
+    props.data !== undefined &&
+    props.buttonPressed === true &&
+    props.city !== 0
   ) {
     return <DailyReport isCelsius={props.isCelsius} data={props.data} />;
-  } else if (props.interval === 3 && props.data !== undefined) {
+  } else if (
+    props.interval === 3 &&
+    props.data !== undefined &&
+    props.data.length > 1 &&
+    props.buttonPressed === true &&
+    props.city !== 0
+  ) {
     return <WeeklyReport isCelsius={props.isCelsius} data={props.data} />;
   } else {
     return <></>;
@@ -231,10 +248,30 @@ function WeatherDisplay() {
               label="Fahrenheit / Celsius"
             />
           </div>
+          {buttonPressed === true && city === 0 ? (
+            <Paper className={classes.error}>
+              <Typography variant="h5" style={{ fontWeight: "bold" }}>
+                WARNING
+              </Typography>
+              <ul>
+                <li>
+                  <Typography>
+                    City has not been selected. Please select city from the
+                    dropdown menu.
+                  </Typography>
+                </li>
+              </ul>
+            </Paper>
+          ) : (
+            <></>
+          )}
+
           <ForecastDisplay
             interval={interval}
             isCelsius={isCelsius}
             data={responseData}
+            buttonPressed={buttonPressed}
+            city={city}
           />
         </Container>
       </div>

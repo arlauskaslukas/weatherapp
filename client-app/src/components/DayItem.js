@@ -43,7 +43,7 @@ const temp = (temperature, isCelsius) => {
   if (isCelsius) {
     return temperature;
   } else {
-    return temperature * 1.8 + 32;
+    return (temperature * 1.8 + 32).toFixed(2);
   }
 };
 
