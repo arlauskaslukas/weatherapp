@@ -65,7 +65,7 @@ function DayItem(props) {
   return (
     <Paper elevation={2} className={classes.paperstyle}>
       <Typography variant="h5" style={{ fontWeight: "bold" }}>
-        25 May, Tuesday
+        {props.date}
       </Typography>
       <div
         style={{

@@ -44,13 +44,14 @@ function DailyReport(props) {
       }}
     >
       <DayItem
-        status="Cloudy"
-        temperature={20}
-        nightlyTemperature={7}
-        humidity={6}
-        windspeed={40}
-        sunrise="06:27"
-        sunset="22:07"
+        date={props.data?.day}
+        status={props.data?.weatherStatus}
+        temperature={props.data?.dayTemperature}
+        nightlyTemperature={props.data?.nightTemperature}
+        humidity={props.data?.humidity}
+        windspeed={props.data?.windSpeed}
+        sunrise={props.data?.sunrise}
+        sunset={props.data?.sunset}
         isCelsius={props.isCelsius}
       />
     </div>
@@ -69,103 +70,50 @@ function WeeklyReport(props) {
           justifyContent: "center",
         }}
       >
-        <Grid item xs={4}>
-          <DayItem
-            status="Cloudy"
-            temperature={20}
-            nightlyTemperature={7}
-            humidity={6}
-            windspeed={40}
-            sunrise="06:27"
-            sunset="22:07"
-            isCelsius={props.isCelsius}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <DayItem
-            status="Cloudy"
-            temperature={20}
-            nightlyTemperature={7}
-            humidity={6}
-            windspeed={40}
-            sunrise="06:27"
-            sunset="22:07"
-            isCelsius={props.isCelsius}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <DayItem
-            status="Cloudy"
-            temperature={20}
-            nightlyTemperature={7}
-            humidity={6}
-            windspeed={40}
-            sunrise="06:27"
-            sunset="22:07"
-            isCelsius={props.isCelsius}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <DayItem
-            status="Cloudy"
-            temperature={20}
-            nightlyTemperature={7}
-            humidity={6}
-            windspeed={40}
-            sunrise="06:27"
-            sunset="22:07"
-            isCelsius={props.isCelsius}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <DayItem
-            status="Cloudy"
-            temperature={20}
-            nightlyTemperature={7}
-            humidity={6}
-            windspeed={40}
-            sunrise="06:27"
-            sunset="22:07"
-            isCelsius={props.isCelsius}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <DayItem
-            status="Cloudy"
-            temperature={20}
-            nightlyTemperature={7}
-            humidity={6}
-            windspeed={40}
-            sunrise="06:27"
-            sunset="22:07"
-            isCelsius={props.isCelsius}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <DayItem
-            status="Cloudy"
-            temperature={20}
-            nightlyTemperature={7}
-            humidity={6}
-            windspeed={40}
-            sunrise="06:27"
-            sunset="22:07"
-            isCelsius={props.isCelsius}
-          />
-        </Grid>
+        {props.data.map((obj) => {
+          <Grid item xs={4}>
+            <DayItem
+              date={obj.day}
+              status={obj.weatherStatus}
+              temperature={obj.dayTemperature}
+              nightlyTemperature={obj.nightTemperature}
+              humidity={obj.humidity}
+              windspeed={obj.windSpeed}
+              sunrise={obj.sunrise}
+              sunset={obj.sunset}
+              isCelsius={props.isCelsius}
+            />
+          </Grid>;
+          console.log(obj);
+        })}
       </Grid>
     </>
   );
 }
 
 function ForecastDisplay(props) {
-  if (props.interval === 1 || props.interval === 2) {
-    return <DailyReport isCelsius={props.isCelsius} />;
-  } else if (props.interval === 3) {
-    return <WeeklyReport isCelsius={props.isCelsius} />;
+  if (
+    (props.interval === 1 || props.interval === 2) &&
+    props.data !== undefined
+  ) {
+    return <DailyReport isCelsius={props.isCelsius} data={props.data} />;
+  } else if (props.interval === 3 && props.data !== undefined) {
+    return <WeeklyReport isCelsius={props.isCelsius} data={props.data} />;
   } else {
     return <></>;
   }
+}
+
+function getDate(tommorrow) {
+  var today = new Date();
+  if (tommorrow === true) {
+    today.setDate(today.getDate() + 1);
+  }
+  var month = today.getMonth() + 1;
+  var monthStr = (month < 10 ? "0" : "") + month;
+  var day = today.getDate();
+  var daystr = (day < 10 ? "0" : "") + day;
+  return today.getFullYear() + "-" + monthStr + "-" + daystr;
 }
 
 function WeatherDisplay() {
@@ -187,19 +135,40 @@ function WeatherDisplay() {
   const onButtonPressed = (cityId, interval) => {
     setButtonPressed(true);
     if (interval === 1) {
-      var today = new Date();
-      var date =
-        today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate();
-      var data = { cityid: cityId, date: date };
+      var date = getDate(false);
       axios
-        .post(`/forecast/oneday/${cityId}`, data.date, {
+        .get(`/forecast/oneday/${cityId}/${date}`, {
           headers: {
             "Content-Type": "application/json",
           },
         })
         .then((res) => {
           setResponseData(res.data);
-          console.log(responseData);
+          console.log(res.data);
+        });
+    } else if (interval === 2) {
+      var date = getDate(true);
+      axios
+        .get(`/forecast/oneday/${cityId}/${date}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setResponseData(res.data);
+          console.log(res.data);
+        });
+    } else if (interval === 3) {
+      var startDate = getDate(false);
+      axios
+        .get(`/forecast/week/${cityId}/${startDate}`, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setResponseData(res.data);
+          console.log(res.data);
         });
     }
   };
@@ -262,7 +231,11 @@ function WeatherDisplay() {
               label="Fahrenheit / Celsius"
             />
           </div>
-          <ForecastDisplay interval={interval} isCelsius={isCelsius} />
+          <ForecastDisplay
+            interval={interval}
+            isCelsius={isCelsius}
+            data={responseData}
+          />
         </Container>
       </div>
     </>

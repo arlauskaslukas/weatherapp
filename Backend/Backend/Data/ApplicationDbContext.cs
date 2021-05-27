@@ -56,13 +56,13 @@ namespace Backend.Data
                         Console.WriteLine("g4ets");
                         var forecast = new Forecast()
                         {
-                            day = DateTime.Parse(reader["day"].ToString(), cultureInfo),
+                            day = DateTime.Parse(reader["day"].ToString(), cultureInfo).ToString("MMMM dd, ddd"),
                             windSpeed = float.Parse(reader["windSpeed"].ToString()),
                             dayTemperature = float.Parse(reader["dayTemperature"].ToString()),
                             nightTemperature = float.Parse(reader["nightTemperature"].ToString()),
                             humidity = Convert.ToInt32(reader["humidity"]),
-                            sunrise = DateTime.Parse(reader["sunrise"].ToString(), cultureInfo),
-                            sunset = DateTime.Parse(reader["sunset"].ToString(), cultureInfo),
+                            sunrise = DateTime.Parse(reader["sunrise"].ToString(), cultureInfo).ToString("HH:mm"),
+                            sunset = DateTime.Parse(reader["sunset"].ToString(), cultureInfo).ToString("HH:mm"),
                             weatherStatus = reader["weatherStatus"].ToString(),
                             fk_Cityid = Convert.ToInt32(reader["fk_Cityid"])
                         };
@@ -89,13 +89,13 @@ namespace Backend.Data
                     {
                         forecasts.Add(new Forecast()
                         {
-                            day = DateTime.Parse(reader["day"].ToString(), cultureInfo),
+                            day = DateTime.Parse(reader["day"].ToString(), cultureInfo).ToString("MMMM dd, ddd"),
                             windSpeed = float.Parse(reader["windSpeed"].ToString()),
                             dayTemperature = float.Parse(reader["dayTemperature"].ToString()),
                             nightTemperature = float.Parse(reader["nightTemperature"].ToString()),
                             humidity = Convert.ToInt32(reader["humidity"]),
-                            sunrise = DateTime.Parse(reader["sunrise"].ToString(), cultureInfo),
-                            sunset = DateTime.Parse(reader["sunset"].ToString(), cultureInfo),
+                            sunrise = DateTime.Parse(reader["sunrise"].ToString(), cultureInfo).ToString("HH:mm"),
+                            sunset = DateTime.Parse(reader["sunset"].ToString(), cultureInfo).ToString("HH:mm"),
                             weatherStatus = reader["weatherStatus"].ToString(),
                             fk_Cityid = Convert.ToInt32(reader["fk_Cityid"])
                         });

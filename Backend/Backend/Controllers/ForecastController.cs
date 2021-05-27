@@ -22,14 +22,14 @@ namespace Backend.Controllers
             applicationDbContext = dbContext;
         }
         [EnableCors("AllowAnyOrigins")]
-        [HttpPost("/api/forecast/oneday/{cityid}")]
-        public Forecast getOneForecast([FromRoute] int cityid, [FromBody] string date)
+        [HttpGet("/api/forecast/oneday/{cityid}/{date}")]
+        public Forecast getOneForecast([FromRoute] int cityid, [FromRoute] string date)
         {
             return applicationDbContext.GetOneDayForecast(cityid, date);
         }
         [EnableCors("AllowAnyOrigins")]
-        [HttpPost("/api/forecast/week")]
-        public IEnumerable<Forecast> getWeeklyForecast([FromHeader] int cityid, [FromHeader] string startDate)
+        [HttpGet("/api/forecast/week/{cityid}/{startDate}")]
+        public IEnumerable<Forecast> getWeeklyForecast([FromRoute] int cityid, [FromRoute] string startDate)
         {
             return applicationDbContext.GetWeeklyForecasts(cityid, startDate);
         }
