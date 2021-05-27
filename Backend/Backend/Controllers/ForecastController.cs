@@ -7,6 +7,7 @@ using Backend.Models;
 using Backend.Data;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
+using Microsoft.AspNetCore.Cors;
 
 namespace Backend.Controllers
 {
@@ -20,10 +21,17 @@ namespace Backend.Controllers
             _logger = logger;
             applicationDbContext = dbContext;
         }
-        [HttpPost("/api/forecast/oneday")]
-        public Forecast getOneForecast([FromHeader]int cityid, [FromHeader] string date)
+        [EnableCors("AllowAnyOrigins")]
+        [HttpPost("/api/forecast/oneday/{cityid}")]
+        public Forecast getOneForecast([FromRoute] int cityid, [FromBody] string date)
         {
             return applicationDbContext.GetOneDayForecast(cityid, date);
+        }
+        [EnableCors("AllowAnyOrigins")]
+        [HttpPost("/api/forecast/week")]
+        public IEnumerable<Forecast> getWeeklyForecast([FromHeader] int cityid, [FromHeader] string startDate)
+        {
+            return applicationDbContext.GetWeeklyForecasts(cityid, startDate);
         }
     }
 }

@@ -47,8 +47,8 @@ namespace Backend.Data
             {
                 con.Open();
                 var cmdtxt = $"select * from dayforecast where fk_Cityid={cityid} and day=\"{date}\"";
-                MySqlCommand cmd = new MySqlCommand(cmdtxt, con);
                 Console.WriteLine(cmdtxt);
+                MySqlCommand cmd = new MySqlCommand(cmdtxt, con);
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
@@ -71,6 +71,38 @@ namespace Backend.Data
                 }
             }
             return null;
+        }
+        public List<Forecast> GetWeeklyForecasts(int cityid, string startDate)
+        {
+            var cultureInfo = new CultureInfo("lt-LT");
+            List<Forecast> forecasts = new List<Forecast>();
+            string endDate = DateTime.Parse(startDate, cultureInfo).AddDays(7).ToString("yyyy-MM-dd");
+            using(MySqlConnection con = GetConnection())
+            {
+                con.Open();
+                var cmdtxt = $"select * from dayforecast where fk_Cityid={cityid} and day>=\"{startDate}\" and day<=\"{endDate}\"";
+                Console.WriteLine(cmdtxt);
+                MySqlCommand cmd = new MySqlCommand(cmdtxt, con);
+                using(var reader = cmd.ExecuteReader())
+                {
+                    while(reader.Read())
+                    {
+                        forecasts.Add(new Forecast()
+                        {
+                            day = DateTime.Parse(reader["day"].ToString(), cultureInfo),
+                            windSpeed = float.Parse(reader["windSpeed"].ToString()),
+                            dayTemperature = float.Parse(reader["dayTemperature"].ToString()),
+                            nightTemperature = float.Parse(reader["nightTemperature"].ToString()),
+                            humidity = Convert.ToInt32(reader["humidity"]),
+                            sunrise = DateTime.Parse(reader["sunrise"].ToString(), cultureInfo),
+                            sunset = DateTime.Parse(reader["sunset"].ToString(), cultureInfo),
+                            weatherStatus = reader["weatherStatus"].ToString(),
+                            fk_Cityid = Convert.ToInt32(reader["fk_Cityid"])
+                        });
+                    }
+                }
+            }
+            return forecasts;
         }
     }
 }

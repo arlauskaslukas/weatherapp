@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Backend.Data;
 using Backend.Models;
+using Microsoft.AspNetCore.Cors;
 
 namespace Backend.Controllers
 {
@@ -19,6 +20,7 @@ namespace Backend.Controllers
             _logger = logger;
             applicationDbContext = dbContext;
         }
+        [EnableCors("AllowAnyOrigins")]
         [HttpGet("/api/cities")]
         public IEnumerable<City> Get()
         {

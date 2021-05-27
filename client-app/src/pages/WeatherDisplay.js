@@ -9,11 +9,12 @@ import {
   FormControlLabel,
   Switch,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import theme from "../theme";
 import RoomIcon from "@material-ui/icons/Room";
 import WatchLaterIcon from "@material-ui/icons/WatchLater";
 import DayItem from "../components/DayItem";
+import axios from "axios";
 
 const useStyles = makeStyles({
   background: {
@@ -172,12 +173,42 @@ function WeatherDisplay() {
   const [city, setCity] = useState(0);
   const [interval, setInterval] = useState(1);
   const [isCelsius, setIsCelsius] = useState(true);
+  const [cities, setCities] = useState(undefined);
+  const [responseData, setResponseData] = useState(undefined);
+  const [buttonPressed, setButtonPressed] = useState(false);
   const onIntervalChange = (event) => {
     setInterval(event.target.value);
+    setButtonPressed(false);
   };
   const onCityChange = (event) => {
     setCity(event.target.value);
+    setButtonPressed(false);
   };
+  const onButtonPressed = (cityId, interval) => {
+    setButtonPressed(true);
+    if (interval === 1) {
+      var today = new Date();
+      var date =
+        today.getFullYear() + "-" + today.getMonth() + "-" + today.getDate();
+      var data = { cityid: cityId, date: date };
+      axios
+        .post(`/forecast/oneday/${cityId}`, data.date, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((res) => {
+          setResponseData(res.data);
+          console.log(responseData);
+        });
+    }
+  };
+  useEffect(() => {
+    axios.get("/cities", {}).then((res) => {
+      setCities(res.data);
+      console.log(res.data);
+    });
+  }, []);
   return (
     <>
       <div className={classes.background}>
@@ -196,6 +227,9 @@ function WeatherDisplay() {
               style={{ marginRight: "20px", marginLeft: "20px" }}
             >
               <MenuItem value={0}>Not Selected</MenuItem>
+              {cities?.map((obj) => (
+                <MenuItem value={obj.id}>{obj.name}</MenuItem>
+              ))}
             </Select>
             <WatchLaterIcon color="primary" />
             <Typography variant="body1" color="primary">
@@ -211,7 +245,11 @@ function WeatherDisplay() {
               <MenuItem value={2}>Tommorrow</MenuItem>
               <MenuItem value={3}>Weekly</MenuItem>
             </Select>
-            <Button color="primary" variant="contained">
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => onButtonPressed(city, interval)}
+            >
               FETCH DATA
             </Button>
             <FormControlLabel
