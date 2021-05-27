@@ -42,6 +42,6 @@ Entity Relations diagram of whole database;
 
 The other thing that's provided is the ddl file for database description if there is a need to load the custom data. The default data however is provided in the csv files in the folder called "Default-Data" and is packed within the sql file.
 
-**Note: the entity framework was not used because all the data that is being paased to the backend is controlled. However in a real case scenario, the cleanup of sql string might be useful or even switching out to EF entirely.**
+**Note: the entity framework was not used because all the data that is being passed to the backend is controlled. However in a real case scenario, the cleanup of sql string might be useful or even switching out to EF entirely.**
 
 **Note: CORS has been enabled in the backend only for the http://localhost:3000. If the client app is being launched on a different port, it won't access the data. Alternatively, use the plugin for browser to turn off the CORS errors.**
