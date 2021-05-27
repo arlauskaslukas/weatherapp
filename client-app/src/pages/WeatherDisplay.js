@@ -159,7 +159,8 @@ function WeatherDisplay() {
         })
         .then((res) => {
           setResponseData(res.data);
-        }).catch((err)=> console.log(err));
+        })
+        .catch((err) => console.log(err));
     } else if (interval === 2) {
       date = getDate(true);
       axios
@@ -170,7 +171,8 @@ function WeatherDisplay() {
         })
         .then((res) => {
           setResponseData(res.data);
-        }).catch((err)=> console.log(err));
+        })
+        .catch((err) => console.log(err));
     } else if (interval === 3) {
       var startDate = getDate(false);
       axios
@@ -181,13 +183,17 @@ function WeatherDisplay() {
         })
         .then((res) => {
           setResponseData(res.data);
-        }).catch((err)=> console.log(err));
+        })
+        .catch((err) => console.log(err));
     }
   };
   useEffect(() => {
-    axios.get("/cities", {}).then((res) => {
-      setCities(res.data);
-    }).catch((err)=> console.log(err));
+    axios
+      .get("/cities", {})
+      .then((res) => {
+        setCities(res.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
   return (
     <>
@@ -222,7 +228,7 @@ function WeatherDisplay() {
               style={{ marginLeft: "20px", marginRight: "20px" }}
             >
               <MenuItem value={1}>Today</MenuItem>
-              <MenuItem value={2}>Tommorrow</MenuItem>
+              <MenuItem value={2}>Tomorrow</MenuItem>
               <MenuItem value={3}>Weekly</MenuItem>
             </Select>
             <Button
