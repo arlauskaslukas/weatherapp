@@ -1,12 +1,10 @@
 import {
-  FormControlLabel,
   makeStyles,
   Paper,
-  Switch,
   Typography,
   Grid,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import WbCloudyIcon from "@material-ui/icons/WbCloudy";
 import OpacityIcon from "@material-ui/icons/Opacity";
@@ -43,7 +41,7 @@ const temp = (temperature, isCelsius) => {
   if (isCelsius) {
     return temperature;
   } else {
-    return (temperature * 1.8 + 32).toFixed(2);
+    return (temperature * 1.8 + 32).toFixed(0);
   }
 };
 
@@ -186,12 +184,11 @@ function DayItem(props) {
       <div
         style={{
           marginTop: "20px",
-          width: "100%",
+          width: "75%",
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-evenly",
-          width: "75%",
         }}
       >
         <WbSunnyIcon style={{ color: "orangered", fontSize: "50px" }} />

@@ -11,7 +11,6 @@ import {
   Paper,
 } from "@material-ui/core";
 import React, { useState, useEffect } from "react";
-import theme from "../theme";
 import RoomIcon from "@material-ui/icons/Room";
 import WatchLaterIcon from "@material-ui/icons/WatchLater";
 import DayItem from "../components/DayItem";
@@ -93,7 +92,6 @@ function WeeklyReport(props) {
               />
             </Grid>
           );
-          console.log(obj);
         })}
       </Grid>
     </>
@@ -161,10 +159,9 @@ function WeatherDisplay() {
         })
         .then((res) => {
           setResponseData(res.data);
-          console.log(res.data);
-        });
+        }).catch((err)=> console.log(err));
     } else if (interval === 2) {
-      var date = getDate(true);
+      date = getDate(true);
       axios
         .get(`/forecast/oneday/${cityId}/${date}`, {
           headers: {
@@ -173,8 +170,7 @@ function WeatherDisplay() {
         })
         .then((res) => {
           setResponseData(res.data);
-          console.log(res.data);
-        });
+        }).catch((err)=> console.log(err));
     } else if (interval === 3) {
       var startDate = getDate(false);
       axios
@@ -185,15 +181,13 @@ function WeatherDisplay() {
         })
         .then((res) => {
           setResponseData(res.data);
-          console.log(res.data);
-        });
+        }).catch((err)=> console.log(err));
     }
   };
   useEffect(() => {
     axios.get("/cities", {}).then((res) => {
       setCities(res.data);
-      console.log(res.data);
-    });
+    }).catch((err)=> console.log(err));
   }, []);
   return (
     <>

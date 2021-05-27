@@ -16,7 +16,6 @@ namespace Backend
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "SiteCORSPolicy";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -27,9 +26,10 @@ namespace Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //allowing frontend to access data
             services.AddCors(o => o.AddPolicy("AllowAnyOrigins", builder =>
             {
-                builder.AllowAnyOrigin()
+            builder.WithOrigins("http://localhost:3000")
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));

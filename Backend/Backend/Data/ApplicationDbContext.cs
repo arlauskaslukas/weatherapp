@@ -47,13 +47,11 @@ namespace Backend.Data
             {
                 con.Open();
                 var cmdtxt = $"select * from dayforecast where fk_Cityid={cityid} and day=\"{date}\"";
-                Console.WriteLine(cmdtxt);
                 MySqlCommand cmd = new MySqlCommand(cmdtxt, con);
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        Console.WriteLine("g4ets");
                         var forecast = new Forecast()
                         {
                             day = DateTime.Parse(reader["day"].ToString(), cultureInfo).ToString("MMMM dd, ddd"),
@@ -81,7 +79,6 @@ namespace Backend.Data
             {
                 con.Open();
                 var cmdtxt = $"select * from dayforecast where fk_Cityid={cityid} and day>=\"{startDate}\" and day<=\"{endDate}\"";
-                Console.WriteLine(cmdtxt);
                 MySqlCommand cmd = new MySqlCommand(cmdtxt, con);
                 using(var reader = cmd.ExecuteReader())
                 {
